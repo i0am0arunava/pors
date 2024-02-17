@@ -12,8 +12,8 @@ export default defineConfig({
       },
       registerType: 'autoUpdate',
       manifest: {
-        name: "Smarter Tasks application",
-        short_name: "Smarter Tasks",
+        name: "Instagram application",
+        short_name: "Instagram",
         icons: [
         
           {
