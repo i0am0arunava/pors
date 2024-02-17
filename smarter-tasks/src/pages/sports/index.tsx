@@ -1,5 +1,4 @@
-
-import "./Sport.css"
+import "./sport.css"
 import Navbar from './Navbar';
 const Sports = () => {
   return (
