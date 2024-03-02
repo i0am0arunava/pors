@@ -14,7 +14,7 @@ const SignupForm: React.FC = () => {
     event.preventDefault();
 
     try {
-      const response = await fetch(`${API_ENDPOINT}/organisations`, {
+      const response = await fetch(`${API_ENDPOINT}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: organisationName, user_name: userName, email: userEmail, password: userPassword}),
@@ -29,7 +29,7 @@ const SignupForm: React.FC = () => {
     const data = await response.json();
 
     // if successful, save the token in localStorage
-    localStorage.setItem('authToken', data.token);
+    localStorage.setItem('authToken', data.auth_token);
     localStorage.setItem('userData', JSON.stringify(data.user))
     navigate("/account")
     } catch (error) {

@@ -31,7 +31,7 @@ const SigninForm: React.FC = () => {
       const responseData = await response.json();
 
       // After successful signin, save the token in localStorage
-      localStorage.setItem('authToken', responseData.token);
+      localStorage.setItem('authToken', responseData.auth_token);
       localStorage.setItem('userData', JSON.stringify(responseData.user));
       navigate("/account");
     } catch (error) {

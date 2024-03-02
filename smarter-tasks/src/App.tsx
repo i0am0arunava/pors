@@ -4,7 +4,7 @@ import router from "./routes";
 import { ThemeContext } from "./context/theme";
 import { ProjectsProvider } from "./context/projects/context";
 import { MembersProvider } from "./context/members/context";
-import {  } from "./context/comment/context";
+import { ArticlesProvider } from "./context/sports/context";
 
 const App = () => {
   const { theme } = useContext(ThemeContext);
@@ -12,15 +12,17 @@ const App = () => {
   return (
     <div
       className={`h-screen w-full mx-auto py-2 ${
-        theme === "dark" ? "dark" : ""
+        theme === "light" ? "dark" : ""
       }`}
     >
       
       <ProjectsProvider>
         <MembersProvider>
+          <ArticlesProvider>
           <>
           <RouterProvider router={router} />
           </>
+          </ArticlesProvider>
         </MembersProvider>
       </ProjectsProvider>
     </div>
