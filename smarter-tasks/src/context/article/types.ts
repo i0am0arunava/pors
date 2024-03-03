@@ -1,12 +1,12 @@
 export interface articlelist {
 
- id:number;
+  id: number;
   sport: item;
   summary: string;
-  teams: teamlist [];
+  teams: teamlist[];
   thumbnail: string;
   title: string;
-  date:string;
+  date: string;
 }
 export type item = {
   id: number;
@@ -46,7 +46,7 @@ export type articlesDispatch = React.Dispatch<ARTICLEActions>;
 export type ARTICLEActions =
 
   | { type: ARTICLEListAvailableAction.FETCH_ARTICLES_REQUEST }
-  | { type: ARTICLEListAvailableAction.FETCH_ARTICLES_SUCCESS; payload: articlelist[]}
+  | { type: ARTICLEListAvailableAction.FETCH_ARTICLES_SUCCESS; payload: articlelist[] }
   | { type: ARTICLEListAvailableAction.FETCH_ARTICLES_FAILURE }
 
   | { type: ARTICLEListAvailableAction.CREATE_ARTICLE_REQUEST }

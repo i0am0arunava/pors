@@ -4,8 +4,9 @@ import router from "./routes";
 import { ThemeContext } from "./context/theme";
 import { ProjectsProvider } from "./context/projects/context";
 import { MembersProvider } from "./context/members/context";
-import { ArticlesProvider } from "./context/sports/context";
-
+import { ArticlesProvider } from "./context/article/context";
+import {SportsProvider} from "./context/sport/context"
+import {MatchesProvider} from "./context/Match/context"
 const App = () => {
   const { theme } = useContext(ThemeContext);
 
@@ -15,7 +16,8 @@ const App = () => {
         theme === "light" ? "dark" : ""
       }`}
     >
-      
+      <MatchesProvider>
+      <SportsProvider>
       <ProjectsProvider>
         <MembersProvider>
           <ArticlesProvider>
@@ -25,6 +27,8 @@ const App = () => {
           </ArticlesProvider>
         </MembersProvider>
       </ProjectsProvider>
+      </SportsProvider>
+      </MatchesProvider>
     </div>
   );
 };

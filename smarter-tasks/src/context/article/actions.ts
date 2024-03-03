@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 
-import {  ARTICLEListAvailableAction, articlesDispatch } from "./types";
+import {  ARTICLEListAvailableAction, articlesDispatch ,articlelist} from "./types";
 export const fetcharticles = async (
   dispatch: articlesDispatch,
 ) => {
@@ -29,3 +29,19 @@ export const fetcharticles = async (
   }
 
 }
+export const refresharticles = async (
+  dispatch: articlesDispatch,
+  data:articlelist[]
+) => {
+  
+  try {
+    dispatch({
+      type: ARTICLEListAvailableAction.FETCH_ARTICLES_SUCCESS,
+      payload: data,
+    });
+
+  } catch (error) {
+    console.error("Operation failed:", error);
+ 
+  }
+};

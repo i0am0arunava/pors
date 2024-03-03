@@ -1,48 +1,109 @@
-import React, { useState } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useEffect } from 'react';
 
+import { useSportsState } from "../../context/sport/context";
+import { useSportsDispatch } from "../../context/sport/context";
+import { FetchSports } from "../../context/sport/actions";
+import { usearticlesState } from "../../context/article/context";
+import { fetcharticles } from "../../context/article/actions";
+import { usearticleDispatch } from "../../context/article/context";
+import { refresharticles } from "../../context/article/actions";
+import { articlelist } from "../../context/article/types";
 
 const Navbar = () => {
   const [activeLink, setActiveLink] = useState('');
- 
+
+  const [fetchedData, setFetchedData] = useState<articlelist[]>([]);
+  const token = localStorage.getItem("authToken")
+  useEffect(() => {
+    fetch('https://wd301-capstone-api.pupilfirst.school/articles', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setFetchedData(data);
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
+  }, [token]);
+
+  // Now you can access 'fetchedData' outside the promise chain
+
+
+
+
+
   const handleLinkClick = (link: React.SetStateAction<string>) => {
     setActiveLink(link);
   };
-const show =(a:string)=>{
-   console.log(a);
-}
+  const sportState = useSportsState();
+  const sportDispatch = useSportsDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const articalState = usearticlesState();
+  const taskDispatch = usearticleDispatch();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
+
+  useEffect(() => {
+    fetcharticles(taskDispatch);
+
+
+  }, [taskDispatch]);
+  console.log(articalState)
+  useEffect(() => {
+    FetchSports(sportDispatch);
+
+
+  }, [sportDispatch]);
+
+  const show = (a: string) => {
+if(a==="all"){
+  fetcharticles(taskDispatch);
+}else{
+    const b = fetchedData?.filter((item) => item.sport.name === a);
+   
+    refresharticles(taskDispatch, b)
+    }
+  }
   return (
     <div className="Navbar">
-      <ul className="flex space-x-4 text-gray-300">
-        <li className={`nav-link ${activeLink === '#home' ? 'active' : ''}`}
-            onClick={() => handleLinkClick('#home')}>
-            <button
-            type="button"
-          
-            onClick={() => show('a')}
-          >
-            All News
-          </button>
+      <ul className="flex space-x-4 ">
+        <li className={`nav-link ${activeLink === "allnews" ? 'active' : ''}`}
+          onClick={() => handleLinkClick("allnews")}>
+                     <button
+              type="button"
+              className={`nav-button ${activeLink === "#allnews" ? 'active' : ''} text-cyan-800`}
+              onClick={() => show("all")}
+            >
+              All News
+            </button>
         </li>
-        <li className={`nav-link ${activeLink === '#b' ? 'active' : ''}`}
-            onClick={() => handleLinkClick('#b')}>
-            <button
-            type="button"
-            className={`nav-button ${activeLink === '#b' ? 'active' : ''}`}
-            onClick={() => show('b')}
+        {sportState.sports.map((sport) => (
+
+          <li
+            key={sport.id}
+            className={`nav-link ${activeLink === `#${sport.name}` ? 'active' : ''}`}
+            onClick={() => handleLinkClick(`#${sport.name}`)}
           >
-            All News
-          </button>
-        </li>
-        <li className={`nav-link ${activeLink === '#c' ? 'active' : ''}`}
-            onClick={() => handleLinkClick('#c')}>
             <button
-            type="button"
-            className={`nav-button ${activeLink === '#c' ? 'active' : ''}`}
-            onClick={() => show('c')}
-          >
-            All News
-          </button>
-        </li>
+              type="button"
+              className={`nav-button ${activeLink === `#${sport.name}` ? 'active' : ''} text-gray-500`}
+              onClick={() => show(sport.name)}
+            >
+              {sport.name}
+            </button>
+          </li>
+        ))}
       </ul>
     </div>
   );
