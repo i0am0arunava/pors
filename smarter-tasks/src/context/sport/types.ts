@@ -2,6 +2,9 @@ export interface Sports {
     id: number,
     name: string
 }
+export interface Sportan{
+    sports: Sports[]
+}
 export interface SportsState {
     sports: Sports[],
     isLoading: boolean,

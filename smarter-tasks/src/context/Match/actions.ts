@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { MatchDispatch, LiveMatchAvailableAction } from "./types";
 import { API_ENDPOINT } from "../../config/constants";
-
+const token = localStorage.getItem("authToken") ?? "";
 export const FetchMatches = async (
     dispatch: MatchDispatch,
 ) => {
@@ -13,7 +13,8 @@ export const FetchMatches = async (
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-            }
+                Authorization: `Bearer ${token}`,
+              },
         })
         if (!res.ok) {
             throw new Error("Failed to Fetch Matches")

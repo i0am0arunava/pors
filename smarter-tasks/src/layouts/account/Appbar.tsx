@@ -6,6 +6,7 @@ import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/images/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../context/theme";
+import NewProject from "../../pages/sports/settings"
 import "./lg.css"
 const userNavigation = [
   { name: "Profile", href: "#" },
@@ -76,7 +77,9 @@ const Appbar = () => {
               </div>
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
-              
+         
+                    <NewProject/>
+            
                   <Switch
                     checked={enabled}
                     onChange={toggleTheme}
@@ -90,6 +93,9 @@ const Appbar = () => {
                         pointer-events-none inline-block h-[16px] w-[16px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
                     />
                   </Switch>
+                  
+                  {/* Setting Icon */}
+                
                   <Menu as="div" className="relative ml-3">
                     <div>
                       <Menu.Button className="rounded-full bg-white p-1 text-gray-400 hover:text-blue-600">

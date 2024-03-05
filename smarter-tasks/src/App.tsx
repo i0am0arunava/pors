@@ -7,6 +7,7 @@ import { MembersProvider } from "./context/members/context";
 import { ArticlesProvider } from "./context/article/context";
 import {SportsProvider} from "./context/sport/context"
 import {MatchesProvider} from "./context/Match/context"
+import {PreferProvider} from "./context/prefer/context"
 const App = () => {
   const { theme } = useContext(ThemeContext);
 
@@ -16,6 +17,7 @@ const App = () => {
         theme === "light" ? "dark" : ""
       }`}
     >
+      <PreferProvider>
       <MatchesProvider>
       <SportsProvider>
       <ProjectsProvider>
@@ -29,6 +31,7 @@ const App = () => {
       </ProjectsProvider>
       </SportsProvider>
       </MatchesProvider>
+      </PreferProvider>
     </div>
   );
 };

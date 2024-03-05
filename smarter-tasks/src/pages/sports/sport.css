@@ -294,3 +294,27 @@
 .downbox{
   background: linear-gradient(to right, rgba(82, 56, 175, 0.334), rgba(31, 32, 31, 0.537) 90%);
 }
+/* styles.css */
+
+.prefbut {
+
+  color: #e4e9ee; /* Change text color on hover */
+  background-color: linear-gradient(90deg, #f0e7e6 50%, rgba(196, 36, 36, 0.878) 50%); /* Use a linear gradient for a mix of dark blue and white on hover */
+  font-weight: thin; /* Set the font weight to thin */
+}
+
+.prefbut:hover {
+  border-color: green; /* Change border color on hover */
+  color: #003366; /* Change text color on hover */
+  background-color: linear-gradient(90deg, #003366 50%, rgba(255, 255, 255, 0.1) 50%); /* Use a linear gradient for a mix of dark blue and white on hover */
+}
+
+.seting{
+color:#0981a2;
+}
+.sec{
+  color:#14a5d1;
+}
+.diag{
+  color:#1911ae;
+}
