@@ -1,7 +1,7 @@
 import React from 'react';
 // Just import the file
 import SigninForm from "./SigninForm"
-
+import { ToastContainer } from 'react-toastify';
 const Signin: React.FC = () => {
   // And use it after the h1 tag
   return (
@@ -9,6 +9,7 @@ const Signin: React.FC = () => {
       <div className="max-w-md w-full px-6 py-8 bg-white rounded-lg shadow-md">
         <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Sign in</h1>
         <SigninForm />
+        <ToastContainer />
       </div>
     </div>
   );

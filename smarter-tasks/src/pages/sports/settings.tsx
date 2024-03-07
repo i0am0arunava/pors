@@ -4,19 +4,20 @@ import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 
 import { CogIcon } from "@heroicons/react/24/outline";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from "react";
 import { matchdata } from "../../context/Match/types";
 import { Sportan } from "../../context/sport/types"
 import { FetchPreferes, updaPreferes } from "../../context/prefer/actions"
 import { usePreferDispatch, usePreferState } from "../../context/prefer/context"
 import { preferance } from "../../context/prefer/types"
-
+import { useNavigate } from "react-router-dom";
 
 
 const NewProject = () => {
 
-
+  const navigate = useNavigate();
   const preferdispatch = usePreferDispatch()
 
 
@@ -123,10 +124,23 @@ const NewProject = () => {
 
 
 
+  if (preferstate.iserror === "Unable to Load Matches") {
+    toast.error("Authentication Failed\n You may be logged in elsewhere\n Please Try To Login Again", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    navigate("/signin");
+  
+  }
 
 
 
- 
   return (
     <>
       <button
@@ -229,7 +243,7 @@ const NewProject = () => {
                     </button>
                     {/* Add Save button if needed */}
                   </div>
-              
+
                 </Dialog.Panel>
               </Transition.Child>
             </div>

@@ -16,6 +16,8 @@ import {  Navigate } from "react-router-dom";
 import Notfound from "../pages/Notfound";
 import ProjectContainer from "../pages/projects/ProjectContainer";
 import TaskDetailsContainer from "../pages/tasks/TaskDetailsContainer";
+import  Read   from "../pages/sports/read";
+
 const router = createBrowserRouter([
     { path: "/", element: <Navigate to="/account/sport" replace /> },
 
@@ -37,6 +39,7 @@ const router = createBrowserRouter([
     element: <Notfound /> 
   },
   // Protected Routes
+ 
   {
     path: "account",
     element: (
@@ -49,7 +52,12 @@ const router = createBrowserRouter([
         { index: true, element: <Navigate to="/account/sport" replace /> },
         {
           path: "sport",
-          element: <Sports/>
+          element: <Sports/>,
+          children: [
+            {
+              path: "News/:Id",
+              element: <Read/>,
+            }]
         },
         {
           path: "projects",

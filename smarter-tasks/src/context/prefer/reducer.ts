@@ -12,7 +12,7 @@ export const PreferReducer: Reducer<preferance,PreferActions> = (
         case PreferAvailableAction.FETCH_PREFER_SUCCESS:
             return { ...state, ...action.payload }
         case PreferAvailableAction.FETCH_PREFER_FAILURE:
-            return { ...state, errorMessage: action.payload }
+            return { ...state, iserror: action.payload }
         default:
             return state;
     }

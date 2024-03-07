@@ -4,11 +4,13 @@ type Team = String;
 export  interface preferance {
   selectedsport: Sport[];
   selectedteam: Team[];
+  iserror:string
 }
 
   export const initialState:preferance = {
     selectedsport: [],
-    selectedteam: []
+    selectedteam: [],
+    iserror:""
 };
 
 

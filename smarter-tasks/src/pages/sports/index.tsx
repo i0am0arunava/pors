@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import "./sport.css"
 import Navbar from './Navbar';
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetcharticles } from "../../context/article/actions";
 import { usearticlesState } from "../../context/article/context";
@@ -12,12 +13,19 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { FaLocationDot } from "react-icons/fa6";
 import SkeletonLoadingtwo from "./loadingtwo";
 import { usePreferState } from "../../context/prefer/context"
+import { useSportsState } from "../../context/sport/context";
+import { articlelist } from "../../context/article/types"
+import { Outlet } from "react-router-dom";
 const Sports = () => {
+  const [userSport, setuserSport] = useState("");
+  const [userTeam, setuserTeam] = useState("");
   const articalState = usearticlesState();
   const preferstate = usePreferState();
   const taskDispatch = usearticleDispatch();
   const matchstate = useMatchesState();
   const matchDispatch = useMatchesDispatch();
+  const sportState = useSportsState();
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [animationCount, setAnimationCount] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -47,64 +55,156 @@ const Sports = () => {
   const sortedData = matchstate.matches.sort((a, b) => (a.isRunning && !b.isRunning ? -1 : 0));
   const filterarticle = articalState.article.filter(item => preferstate.selectedsport.includes(item.sport.name));
 
-const filteredArray = sortedData.filter(item => {
-  return (preferstate.selectedsport.includes(item.sportName) || item.teams.some(t => preferstate.selectedteam.includes(t.name)))  && !item.isRunning;
-});
-const livess = sortedData.filter(item => item.isRunning);
-const finalmatch=[...livess,...filteredArray ]
-console.log("fing",finalmatch)
+  const filteredArray = sortedData.filter(item => {
+    return (preferstate.selectedsport.includes(item.sportName) || item.teams.some(t => preferstate.selectedteam.includes(t.name))) && !item.isRunning;
+  });
+  const livess = sortedData.filter(item => item.isRunning);
+  const finalmatch = [...livess, ...filteredArray]
 
-const hasMatchingsport = livess.some(item => preferstate.selectedsport.includes(item.sportName));
-const hasMatchingTeams = livess.some(item => item.teams.some(team => preferstate.selectedteam.includes(team.name)))
 
-let matchfin;
-if( finalmatch.every(item => item.isRunning === true) && !hasMatchingsport && !hasMatchingTeams ){
-matchfin=sortedData;
-}else{
-  matchfin=finalmatch
-}
+  const hasMatchingsport = livess.some(item => preferstate.selectedsport.includes(item.sportName));
+  const hasMatchingTeams = livess.some(item => item.teams.some(team => preferstate.selectedteam.includes(team.name)))
+
+  let matchfin;
+  if (finalmatch.every(item => item.isRunning === true) && !hasMatchingsport && !hasMatchingTeams) {
+    matchfin = sortedData;
+  } else {
+    matchfin = finalmatch
+  }
+
+  const [fetchednewart, setFetchednew] = useState<articlelist[]>([]);
+  const token = localStorage.getItem("authToken")
+  useEffect(() => {
+    fetch('https://wd301-capstone-api.pupilfirst.school/articles', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        setFetchednew(data);
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
+  }, [token]);
+  const newartic = fetchednewart.filter(item => preferstate.selectedsport.includes(item.sport.name));
+
+
+
+  let fetchedData;
+  if (newartic.length === 0) {
+    fetchedData = fetchednewart
+  } else {
+    fetchedData = newartic
+  }
+
+  const temsare = matchstate.matches.flatMap(obj => obj.teams);
+  const preferteam = temsare.filter(item => preferstate.selectedteam.includes(item.name))
+  let curteam;
+  if (preferstate.selectedteam.length === 0) {
+    curteam = temsare
+  } else {
+
+    curteam = preferteam
+  }
+  const prefersport = sportState.sports.filter(item => preferstate.selectedsport.includes(item.name))
+  let cursports;
+  if (preferstate.selectedsport.length === 0) {
+    cursports = sportState.sports
+  } else {
+
+    cursports = prefersport
+  }
+
+  const userselect = [userSport, userTeam]
+  let usersidebar;
+  if (userSport == "" && userTeam != "") {
+
+    usersidebar = fetchedData.filter(item => {
+      return (item.teams.some(t => userselect.includes(t.name)));
+    });
+  } else if (userTeam === "" && userSport != "") {
+    usersidebar = fetchedData.filter(item => {
+      return (userselect.includes(item.sport.name));
+    });
+  } else if (userSport == "" && userTeam == "") {
+    usersidebar = fetchedData;
+  } else {
+    usersidebar = fetchedData.filter(item => {
+      return (userselect.includes(item.sport.name) && item.teams.some(t => userselect.includes(t.name)));
+    });
+  }
+  let userfavaur;
+  if (usersidebar.length != 0) {
+    userfavaur = usersidebar
+  } else {
+    userfavaur = [{ id:"notfound",title: `There is No News Article For ${userselect[0]} and ${userselect[1]} `, thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYLzUKYgf4-dLgzX8ScukVzj6x4GY17uAqmWPa5TwThJxUWD5iK8YHjlENPs2N-kAeIaA&usqp=CAU",sport:{id:null,name:"none"} }]
+  }
+
+
+  console.log(" userfavaur2",  userfavaur )
   return (
 
     <div className="hell">
 
       <div className="sidebar">
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
+        <div className="content-box3">
+          <div className="label">FAVOURATE</div>
+          <select
+            id="sportSelect"
+            className="appearance-none py-2 px-4 pr-8 rounded leading-tight focus:outline-none"
+            value={userSport}
+            onChange={(e) => setuserSport(e.target.value)}
+          >
+            <option value="">Select Sport</option>
+            <option value="">Refresh Sport Section</option>
+            {cursports.map((sport) => (
+              <option key={sport.id} value={sport.name}>
+                {sport.name}
+              </option>
+            ))}
+          </select>
+          <select
+            id="teamSelect"
+            className="appearance-none py-2 px-4 pr-8 rounded leading-tight focus:outline-none"
+            value={userTeam}
+            onChange={(e) => setuserTeam(e.target.value)}
+          >
+            <option value="">Select Team</option>
+            <option value="">Refresh Team Section</option>
+            {curteam.map((team) => (
+              <option key={team.id} value={team.name}>
+                {team.name}
+              </option>
+            ))}
+          </select>
 
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
+        </div>
+        <div>
 
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-        <div className="content-box2"></div>
-
-
+          {userfavaur.map((data, index) => (
+            <div className="content-box2" key={index}>
+              {/* Use data from fetchedData and fetched.ttl here */}
+              <img
+                src={data.thumbnail}
+                alt="Thumbnail"
+                className="w-[300px] h-[200px] max-w-full max-h-full object-cover rounded-t-lg min-[1024px]:rounded-l-lg p-1"
+              />
+              <p>{data.sport.name}</p>
+              <div className="read-more">
+                              <Link to={`News/${data.id}`}>Read more</Link>
+                            </div>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="rectangular-box" style={{ animationIterationCount: animationCount }}>
         {matchstate.isLoading ? (
@@ -177,54 +277,71 @@ matchfin=sortedData;
             <>
               {filterarticle.length === 0 ? (
                 articalState.article.map((article) => (
-                  <div className="content-box1" key={article.id}>
-                    <div className="image-wrapper relative">
-                      <img
-                        src={article.thumbnail}
-                        alt="Thumbnail"
-                        className="w-[300px] h-[200px] max-w-full max-h-full object-cover rounded-t-lg min-[1024px]:rounded-l-lg p-1"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center ">
-                        <div className="text-white text-center">
-                          <div className="text-lg font-bold mb-2">
-                            <b>
-                              <i>{article.sport.name}</i>
-                            </b>
+                  <Link
+
+                    to={`News/${article.id}`}
+
+                  >
+                    <div className="content-box1" key={article.id}>
+                      <div className="image-wrapper relative">
+                        <img
+                          src={article.thumbnail}
+                          alt="Thumbnail"
+                          className="w-[300px] h-[200px] max-w-full max-h-full object-cover rounded-t-lg min-[1024px]:rounded-l-lg p-1"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center ">
+                          <div className="text-white text-center">
+                            <div className="text-lg font-bold mb-2">
+                              <b>
+                                <i>{article.sport.name}</i>
+                              </b>
+                            </div>
+                            <div className="mb-2">
+                              <i>{article.title}</i>
+                            </div>
+                            <div className="read-more-button">
+                              <Link to={`News/${article.id}`}>Read more</Link>
+                            </div>
                           </div>
-                          <div className="mb-2">
-                            <i>{article.title}</i>
-                          </div>
-                          {/* Add other details like summary or date if needed */}
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
               ) : (
                 filterarticle.map((article) => (
-                  <div className="content-box1" key={article.id}>
-                    <div className="image-wrapper relative">
-                      <img
-                        src={article.thumbnail}
-                        alt="Thumbnail"
-                        className="w-[300px] h-[200px] max-w-full max-h-full object-cover rounded-t-lg min-[1024px]:rounded-l-lg p-1"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center ">
-                        <div className="text-white text-center">
-                          <div className="text-lg font-bold mb-2">
-                            <b>
-                              <i>{article.sport.name}</i>
-                            </b>
+                  <Link
+
+                    to={`News/${article.id}`}
+
+                  >
+                    <div className="content-box1" key={article.id}>
+                      <div className="image-wrapper relative">
+                        <img
+                          src={article.thumbnail}
+                          alt="Thumbnail"
+                          className="w-[300px] h-[200px] max-w-full max-h-full object-cover rounded-t-lg min-[1024px]:rounded-l-lg p-1"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center ">
+                          <div className="text-white text-center">
+                            <div className="text-lg font-bold mb-2">
+                              <b>
+                                <i>{article.sport.name}</i>
+                              </b>
+                            </div>
+                            <div className="mb-2">
+                              <i>{article.title}</i>
+                            </div>
+                            <div className="read-more-button">
+                              <Link to={`News/${article.id}`}>Read more</Link>
+                            </div>
                           </div>
-                          <div className="mb-2">
-                            <i>{article.title}</i>
-                          </div>
-                          {/* Add other details like summary or date if needed */}
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </Link>
                 ))
+
               )}
             </>
           )}
@@ -232,7 +349,7 @@ matchfin=sortedData;
       </div>
 
 
-
+      <Outlet />;
     </div >
 
 

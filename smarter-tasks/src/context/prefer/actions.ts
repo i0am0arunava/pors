@@ -62,7 +62,7 @@ export const FetchPreferes = async (
      
        console.log("finally",data)
     } catch (error) {
-        console.log(`Operation Failed:${error}`)
+        console.log(`this Operation Failed so what have to:${error}`)
         dispatch({ type: PreferAvailableAction.FETCH_PREFER_FAILURE, payload: "Unable to Load Matches" })
     }
 }
