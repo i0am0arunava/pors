@@ -146,11 +146,11 @@ const Sports = () => {
   if (usersidebar.length != 0) {
     userfavaur = usersidebar
   } else {
-    userfavaur = [{ id:"notfound",title: `There is No News Article For ${userselect[0]} and ${userselect[1]} `, thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYLzUKYgf4-dLgzX8ScukVzj6x4GY17uAqmWPa5TwThJxUWD5iK8YHjlENPs2N-kAeIaA&usqp=CAU",sport:{id:null,name:"none"} }]
+    userfavaur = [{ id: "notfound", title: `There is No News Article For ${userselect[0]} and ${userselect[1]} `, thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYLzUKYgf4-dLgzX8ScukVzj6x4GY17uAqmWPa5TwThJxUWD5iK8YHjlENPs2N-kAeIaA&usqp=CAU", sport: { id: null, name: "none" } }]
   }
 
 
-  console.log(" userfavaur2",  userfavaur )
+  console.log(" userfavaur2", userfavaur)
   return (
 
     <div className="hell">
@@ -200,8 +200,8 @@ const Sports = () => {
               />
               <p>{data.sport.name}</p>
               <div className="read-more">
-                              <Link to={`News/${data.id}`}>Read more</Link>
-                            </div>
+                <Link to={`News/${data.id}`}>Read more</Link>
+              </div>
             </div>
           ))}
         </div>
@@ -232,13 +232,17 @@ const Sports = () => {
 
               </>}
               <div className="match-name">{match.sportName}</div>
-              <div className="match-description">{match.name}</div>
+             
               <div className="match-team">
                 {match.teams.map((item) => (
-                  <div key={item.id}>{item.name}:{item.id}</div>
+             <div key={item.id} className="score">
+             <span className="team">{item.name}</span>
+             <span>{item.id}</span>
+           </div>
+           
                 ))}
               </div>
-
+              <div className="refresh"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 0 0 4.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 0 1-15.357-2m15.357 2H15"/></svg></div>
               <div className="match-location">
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <FaLocationDot style={{ fontSize: '30px', color: '#102894', marginRight: '5px' }} />

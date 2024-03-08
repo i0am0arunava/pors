@@ -1,6 +1,6 @@
 /* eslint-disable no-empty-pattern */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { useState, Fragment, useContext } from "react";
+import { useState, Fragment, useContext,useEffect } from "react";
 import { Disclosure, Menu, Transition, Switch } from "@headlessui/react";
 import { UserCircleIcon } from "@heroicons/react/24/outline";
 import Logo from "../../assets/images/logo.png";
@@ -8,10 +8,6 @@ import { Link, useLocation } from "react-router-dom";
 import { ThemeContext } from "../../context/theme";
 import NewProject from "../../pages/sports/settings"
 import "./lg.css"
-const userNavigation = [
-  { name: "Profile", href: "#" },
-  { name: "Sign out", href: "/logout" },
-];
 
 const classNames = (...classes: string[]): string =>
   classes.filter(Boolean).join(" ");
@@ -20,6 +16,35 @@ const Appbar = () => {
   const { theme, setTheme } = useContext(ThemeContext);
   const [enabled, setEnabled] = useState(theme === "dark");
   const { pathname } = useLocation();
+  const [isuser, setUser] = useState(false);
+
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setUser(!!localStorage.getItem("userData"));
+  });
+
+ const useras = [
+   { name: "Profile", href: "#" },
+   { name: "Sign out", href: "/logout" },
+ ];
+ const guest=[
+   { name: "Profile", href: "#" },
+   { name: "Sign Up", href: "/signup" },
+   { name: "Sign in", href: "/signin" },
+ ]
+ let userNavigation;
+ if(isuser){
+   userNavigation=useras
+ }else{
+   userNavigation=guest
+ }
+ 
+
+
+
+
+
 
   const navigation = [
     { name: "Projects", href: "/account/projects", current: false },
@@ -78,7 +103,7 @@ const Appbar = () => {
               <div className="hidden md:block">
                 <div className="ml-4 flex items-center md:ml-6">
          
-                    <NewProject/>
+                {isuser && <NewProject />}
             
                   <Switch
                     checked={enabled}

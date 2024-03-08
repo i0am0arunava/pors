@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment,useRef } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_ENDPOINT } from "../../config/constants";
@@ -39,6 +39,23 @@ const read = () => {
   function closeModal() {
     setIsOpen(false);
     navigate("../../");
+  }
+  // eslint-disable-next-line prefer-const
+  let synth = window.speechSynthesis;
+  let voice;
+  const textToSpeakRef = useRef<HTMLDivElement>(null);
+
+  // other code...
+
+  function speak() {
+    console.log("speak");
+    voice = new SpeechSynthesisUtterance(`${textToSpeakRef.current?.textContent}`);
+    synth.speak(voice);
+  }
+
+  function stopSpeaking() {
+      console.log("stopSpeaking");
+      synth.cancel();
   }
   if (data) {
     return (
@@ -132,9 +149,13 @@ const read = () => {
                                   </span>
                                 ))}
                               </p>
-                              <p className="md:my-6 xl:my-24 text-md md:text-xl leading-normal md:leading-8 text-white">
+                              <button id="speak" onClick={speak}>Speak</button>
+<button id="stop" onClick={stopSpeaking}>Stop</button>
+
+                              <div id="texttospeak" ref={textToSpeakRef}> <p className="md:my-6 xl:my-24 text-md md:text-xl leading-normal md:leading-8 text-white">
                                 {data?.content}
-                              </p>
+                              </p></div>
+                             
                             </div>
                           </div>
                         </div>
