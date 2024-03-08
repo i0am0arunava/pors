@@ -17,7 +17,10 @@ const Appbar = () => {
   const [enabled, setEnabled] = useState(theme === "dark");
   const { pathname } = useLocation();
   const [isuser, setUser] = useState(false);
-
+  interface NavigationItem {
+    name: string;
+    href: string;
+  }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -33,7 +36,7 @@ const Appbar = () => {
    { name: "Sign Up", href: "/signup" },
    { name: "Sign in", href: "/signin" },
  ]
- let userNavigation;
+ let userNavigation: NavigationItem[];
  if(isuser){
    userNavigation=useras
  }else{
